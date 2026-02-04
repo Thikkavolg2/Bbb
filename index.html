@@ -14,10 +14,10 @@
       font-family: 'Segoe UI', sans-serif;
     }
 
-    /* Content Overlay */
-    .overlay {
+    /* --- Content Overlay --- */
+    .content-wrapper {
       position: absolute;
-      top: 45%;
+      top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
       width: 100%;
@@ -28,52 +28,65 @@
       pointer-events: none;
     }
 
+    /* Banner Image */
     .banner-img {
-      width: 85%;
-      max-width: 450px;
-      border-radius: 15px;
-      box-shadow: 0 0 50px rgba(255, 190, 41, 0.6);
-      margin-bottom: 30px;
-      animation: powerIn 1.5s ease-out;
+      width: 80%;
+      max-width: 400px;
+      border-radius: 20px;
+      box-shadow: 0 0 50px rgba(255, 190, 41, 0.4);
+      z-index: 105;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      animation: zoomIn 2s ease-out;
     }
 
-    @keyframes powerIn {
-      0% { opacity: 0; transform: scale(0.8); filter: brightness(2); }
-      100% { opacity: 1; transform: scale(1); filter: brightness(1); }
+    @keyframes zoomIn {
+      from { opacity: 0; transform: scale(0.8); }
+      to { opacity: 1; transform: scale(1); }
     }
 
-    /* --- Original High-Effect Circles --- */
-    .container {
-      position: relative;
-      height: 200px;
-      width: 100%;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      perspective: 1000px;
-    }
-
-    .circle {
+    /* --- Advanced Ripple Effect (Under the Image) --- */
+    .ripple-container {
       position: absolute;
-      background: transparent;
-      width: calc(var(--i) * 2.5vmin);
-      aspect-ratio: 1;
-      border-radius: 50%;
-      border: 3px solid rgb(0, 255, 13);
-      transform-style: preserve-3d;
-      transform: rotateX(70deg) translateZ(50px);
-      animation: animateOriginal 3s ease-in-out calc(var(--i) * 0.08s) infinite;
-      box-shadow: 0 0 15px rgb(124, 124, 124), inset 0 0 15px rgb(124, 124, 124);
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 1px;
+      height: 1px;
+      z-index: 101;
     }
 
-    @keyframes animateOriginal {
-      0%, 100% {
-        transform: rotateX(70deg) translateZ(50px) translateY(0);
-        filter: hue-rotate(0);
+    .ripple {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) rotateX(70deg);
+      border-radius: 50%;
+      border: 2px solid #FFD700;
+      width: 100px;
+      height: 100px;
+      opacity: 0;
+      animation: rippleEffect 4s linear calc(var(--i) * 0.3s) infinite;
+    }
+
+    @keyframes rippleEffect {
+      0% {
+        width: 100px;
+        height: 100px;
+        opacity: 0.8;
+        border-color: #FFD700; /* Gold */
+        box-shadow: 0 0 20px #FFD700;
       }
       50% {
-        transform: rotateX(70deg) translateZ(50px) translateY(-45vmin);
-        filter: hue-rotate(360deg);
+        border-color: #0077FF; /* Blue */
+        box-shadow: 0 0 40px #0077FF;
+        opacity: 0.5;
+      }
+      100% {
+        width: 600px;
+        height: 600px;
+        opacity: 0;
+        border-color: #8A2BE2; /* Purple */
+        box-shadow: 0 0 60px #8A2BE2;
       }
     }
 
@@ -82,26 +95,27 @@
 </head>
 <body>
 
-  <div class="overlay">
-    <img src="78new.jpg" alt="78 Independence Day" class="banner-img">
-    <div class="container">
-      <div class="circle" style="--i:0;"></div><div class="circle" style="--i:1;"></div>
-      <div class="circle" style="--i:2;"></div><div class="circle" style="--i:3;"></div>
-      <div class="circle" style="--i:4;"></div><div class="circle" style="--i:5;"></div>
-      <div class="circle" style="--i:6;"></div><div class="circle" style="--i:7;"></div>
-      <div class="circle" style="--i:8;"></div><div class="circle" style="--i:9;"></div>
-      <div class="circle" style="--i:10;"></div><div class="circle" style="--i:11;"></div>
-      <div class="circle" style="--i:12;"></div><div class="circle" style="--i:13;"></div>
-      <div class="circle" style="--i:14;"></div><div class="circle" style="--i:15;"></div>
-      <div class="circle" style="--i:16;"></div><div class="circle" style="--i:17;"></div>
-      <div class="circle" style="--i:18;"></div><div class="circle" style="--i:19;"></div>
-      <div class="circle" style="--i:20;"></div>
+  <div class="content-wrapper">
+    <div class="ripple-container">
+      <div class="ripple" style="--i:1;"></div>
+      <div class="ripple" style="--i:2;"></div>
+      <div class="ripple" style="--i:3;"></div>
+      <div class="ripple" style="--i:4;"></div>
+      <div class="ripple" style="--i:5;"></div>
+      <div class="ripple" style="--i:6;"></div>
+      <div class="ripple" style="--i:7;"></div>
+      <div class="ripple" style="--i:8;"></div>
+      <div class="ripple" style="--i:9;"></div>
+      <div class="ripple" style="--i:10;"></div>
+      <div class="ripple" style="--i:11;"></div>
+      <div class="ripple" style="--i:12;"></div>
     </div>
+    <img src="78new.jpg" alt="78 Independence Day" class="banner-img">
   </div>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <script>
-    let scene, camera, renderer, cloudParticles = [], flash, rain, rainGeo, rainCount = 15000;
+    let scene, camera, renderer, cloudParticles = [], flash, rain, rainGeo, rainCount = 10000;
 
     function init() {
       scene = new THREE.Scene();
@@ -111,33 +125,35 @@
       camera.rotation.y = -0.12;
       camera.rotation.z = 0.27;
 
-      scene.add(new THREE.AmbientLight(0x555555));
+      scene.add(new THREE.AmbientLight(0x444444));
+      
       let directLight = new THREE.DirectionalLight(0xffeedd);
       directLight.position.set(0,0,1);
       scene.add(directLight);
 
-      flash = new THREE.PointLight(0x062d89, 30, 500, 1.7);
+      // Blue Lightning
+      flash = new THREE.PointLight(0x0066ff, 30, 500, 1.7);
       flash.position.set(200,300,100);
       scene.add(flash);
 
-      renderer = new THREE.WebGLRenderer();
+      renderer = new THREE.WebGLRenderer({ antialias: true });
       renderer.setSize(window.innerWidth, window.innerHeight);
       document.body.appendChild(renderer.domElement);
 
-      // --- Clouds with fallback color if image fails ---
+      // Clouds (White Smoke)
       let loader = new THREE.TextureLoader();
       loader.load("https://raw.githubusercontent.com/mrdoob/three.js/master/examples/textures/terrain/grasslight-big.jpg", function(texture){
-        // සටහන: මෙහිදී මම cloud texture එකක් ලෙස භාවිතා කළ හැකි පොදු image එකක් ගත්තා
-        let cloudGeo = new THREE.PlaneBufferGeometry(500,500);
+        // සටහන: වලාකුළු සඳහා සුදු පැහැති මීදුම් ස්වභාවයක් ලබා දීම
+        let cloudGeo = new THREE.PlaneGeometry(500,500);
         let cloudMaterial = new THREE.MeshLambertMaterial({
-          map: texture,
           transparent: true,
-          opacity: 0.1 // දුම් වැනි ස්වභාවයක් ලබා දීමට
+          opacity: 0.1,
+          color: 0xffffff
         });
 
         for(let p=0; p<25; p++) {
           let cloud = new THREE.Mesh(cloudGeo, cloudMaterial);
-          cloud.position.set(Math.random()*800 -400, 500, Math.random()*500 - 450);
+          cloud.position.set(Math.random()*800 - 400, 500, Math.random()*500 - 450);
           cloud.rotation.x = 1.16;
           cloud.rotation.y = -0.12;
           cloud.rotation.z = Math.random()*360;
@@ -146,7 +162,7 @@
         }
       });
 
-      // --- Rain Engine ---
+      // Rain
       rainGeo = new THREE.BufferGeometry();
       let positions = new Float32Array(rainCount * 3);
       for(let i=0; i<rainCount; i++) {
@@ -174,13 +190,13 @@
       
       let pos = rainGeo.attributes.position.array;
       for(let i=0; i<rainCount; i++) {
-        pos[i*3+1] -= 4; // Faster rain
+        pos[i*3+1] -= 4;
         if (pos[i*3+1] < -200) pos[i*3+1] = 200;
       }
       rainGeo.attributes.position.needsUpdate = true;
 
-      // Lightning
-      if(Math.random() > 0.94 || flash.power > 100) {
+      // Real Blue Lightning logic
+      if(Math.random() > 0.95 || flash.power > 100) {
         if(flash.power < 100) flash.position.set(Math.random()*400, 300+Math.random()*200, 100);
         flash.power = 50 + Math.random() * 500;
       }
