@@ -5,193 +5,179 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>78th Independence Day Sri Lanka</title>
   <style>
-    /* --- Main Styling --- */
     body {
+      margin: 0;
       width: 100vw;
       height: 100vh;
-      margin: 0;
-      /* Plain Black එක වෙනුවට Dark Night Gradient එකක් */
-      background: radial-gradient(ellipse at bottom, #1b2735 0%, #090a0f 100%);
       overflow: hidden;
+      background: #000;
       font-family: 'Segoe UI', sans-serif;
     }
 
-    /* --- Three.js Canvas --- */
-    canvas {
-      position: fixed;
-      top: 0;
-      left: 0;
-      z-index: 1;
-      opacity: 0.8; /* පසුබිම් වර්ණය සමග ලස්සනට මිශ්‍ර වීමට */
-    }
-
-    /* --- Content Overlay --- */
-    .content-overlay {
+    /* --- Content Wrapper --- */
+    .content-wrapper {
       position: absolute;
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
       width: 100%;
-      height: 100%;
       display: flex;
       flex-direction: column;
-      justify-content: center;
       align-items: center;
       z-index: 100;
       pointer-events: none;
     }
 
     .banner-img {
-      width: 85%;
-      max-width: 450px;
-      border-radius: 15px;
-      box-shadow: 0 0 50px rgba(255, 190, 41, 0.4);
-      z-index: 101;
-      animation: zoomIn 1.5s ease-out;
-      border: 1px solid rgba(255, 255, 255, 0.1);
+      width: 80%;
+      max-width: 420px;
+      border-radius: 20px;
+      box-shadow: 0 0 50px rgba(255, 190, 41, 0.5);
+      z-index: 105;
+      animation: entrance 1.5s ease-out;
     }
 
-    @keyframes zoomIn {
-      from { opacity: 0; transform: scale(0.9); }
-      to { opacity: 1; transform: scale(1); }
+    /* --- Creative Wishing Text --- */
+    .wish-text {
+      margin-top: 40px;
+      text-align: center;
+      z-index: 110;
     }
 
-    /* --- Optimized Circles Animation --- */
-    .container {
-      position: relative;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 250px;
-      width: 100%;
-      transform-style: preserve-3d;
-      perspective: 1000px;
+    .wish-text h1 {
+      font-size: 2.5rem;
+      font-weight: 900;
+      margin: 0;
+      /* ශ්‍රී ලංකා ධජයේ වර්ණ සහිත Gradient එකක් */
+      background: linear-gradient(to right, #ffbe29, #ffffff, #00534e, #800000);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-size: 300%;
+      animation: gradientMove 5s linear infinite;
+      filter: drop-shadow(0 0 10px rgba(255,255,255,0.2));
     }
 
-    .circle {
+    .wish-text p {
+      color: #fff;
+      letter-spacing: 5px;
+      font-size: 0.9rem;
+      opacity: 0.7;
+      text-transform: uppercase;
+      margin-top: 5px;
+    }
+
+    /* අකුණු ගසන විට අකුරු දිලිසෙන animation එක */
+    .flash-glow {
+      animation: textFlash 0.5s ease-out;
+    }
+
+    @keyframes gradientMove {
+      0% { background-position: 0% 50%; }
+      100% { background-position: 100% 50%; }
+    }
+
+    @keyframes textFlash {
+      0% { filter: brightness(1) blur(0px); }
+      50% { filter: brightness(5) blur(2px); text-shadow: 0 0 30px #fff; }
+      100% { filter: brightness(1) blur(0px); }
+    }
+
+    /* --- Ripple Effect (Original Power) --- */
+    .ripple-container {
       position: absolute;
-      background: transparent;
-      width: calc(15vmin + (var(--i) * 2vmin));
-      aspect-ratio: 1;
+      top: 40%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 101;
+    }
+
+    .ripple {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) rotateX(75deg);
       border-radius: 50%;
-      border: 2px solid #FFBE29;
-      transform-style: preserve-3d;
-      animation: animate 4s ease-in-out calc(var(--i) * 0.1s) infinite;
-      box-shadow: 0 0 8px rgba(255, 190, 41, 0.3);
+      border: 2px solid #FFD700;
+      width: 80px;
+      height: 80px;
+      opacity: 0;
+      animation: rippleEffect 4s linear calc(var(--i) * 0.3s) infinite;
     }
 
-    @keyframes animate {
-      0%, 100% {
-        transform: rotateX(75deg) translateZ(0) translateY(0);
-        border-color: #FFBE29;
-        opacity: 0.6;
-      }
-      50% {
-        transform: rotateX(75deg) translateZ(0) translateY(-20vh);
-        border-color: #0084ff; /* නිල් පාටට හැරෙනවා */
-        opacity: 1;
-      }
+    @keyframes rippleEffect {
+      0% { width: 80px; height: 80px; opacity: 1; border-color: #FFD700; box-shadow: 0 0 20px #FFD700; }
+      50% { border-color: #0077FF; box-shadow: 0 0 40px #0077FF; opacity: 0.5; }
+      100% { width: 700px; height: 700px; opacity: 0; border-color: #ffffff; }
     }
 
-    @media (max-height: 700px) {
-      .banner-img { max-width: 300px; }
-    }
+    canvas { display: block; position: fixed; top: 0; left: 0; z-index: 1; }
+    @keyframes entrance { from { opacity: 0; transform: scale(0.5); } to { opacity: 1; transform: scale(1); } }
   </style>
 </head>
 <body>
 
-  <div class="content-overlay">
+  <div class="content-wrapper">
+    <div class="ripple-container">
+      <div class="ripple" style="--i:1;"></div><div class="ripple" style="--i:2;"></div>
+      <div class="ripple" style="--i:3;"></div><div class="ripple" style="--i:4;"></div>
+      <div class="ripple" style="--i:5;"></div><div class="ripple" style="--i:6;"></div>
+      <div class="ripple" style="--i:7;"></div><div class="ripple" style="--i:8;"></div>
+      <div class="ripple" style="--i:9;"></div><div class="ripple" style="--i:10;"></div>
+    </div>
+
     <img src="78new.jpg" alt="78th Independence Day" class="banner-img">
 
-    <div class="container">
-      <div class="circle" style="--i:1;"></div><div class="circle" style="--i:2;"></div>
-      <div class="circle" style="--i:3;"></div><div class="circle" style="--i:4;"></div>
-      <div class="circle" style="--i:5;"></div><div class="circle" style="--i:6;"></div>
-      <div class="circle" style="--i:7;"></div><div class="circle" style="--i:8;"></div>
-      <div class="circle" style="--i:9;"></div><div class="circle" style="--i:10;"></div>
-      <div class="circle" style="--i:11;"></div><div class="circle" style="--i:12;"></div>
-      <div class="circle" style="--i:13;"></div><div class="circle" style="--i:14;"></div>
-      <div class="circle" style="--i:15;"></div>
+    <div class="wish-text" id="wishContainer">
+      <h1 id="wishTitle">නිදහස් දින සුබ පැතුම්</h1>
+      <p>Pride of Sri Lanka</p>
     </div>
   </div>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-  
   <script>
-    let scene, camera, renderer, cloudParticles = [], flash, rain, rainGeo, rainCount = 8000; // Count reduced for performance
+    let scene, camera, renderer, cloudParticles = [], flash, rain, rainGeo, rainCount = 9000;
 
     function init() {
       scene = new THREE.Scene();
-      
-      // Fog එක නිල් පාට කරා (Background එකට ගැලපෙන්න)
-      scene.fog = new THREE.FogExp2(0x1b2735, 0.002);
-
       camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 1, 1000);
       camera.position.z = 1;
       camera.rotation.x = 1.16;
       camera.rotation.y = -0.12;
       camera.rotation.z = 0.27;
 
-      let ambient = new THREE.AmbientLight(0x555555);
-      scene.add(ambient);
-
-      let directionalLight = new THREE.DirectionalLight(0xff8877); // මදක් තැඹිලි පාට එළියක්
-      directionalLight.position.set(0,0,1);
-      scene.add(directionalLight);
-
-      // නිල් පාට විදුලි කෙටීම (Blue Lightning)
-      flash = new THREE.PointLight(0x062d89, 30, 500, 1.7);
+      scene.add(new THREE.AmbientLight(0x444444));
+      
+      flash = new THREE.PointLight(0x0066ff, 0, 500, 1.7);
       flash.position.set(200,300,100);
       scene.add(flash);
 
-      renderer = new THREE.WebGLRenderer({ alpha: true, antialias: false }); // Performance වැඩි කරන්න antialias false
-      renderer.setClearColor(0x000000, 0); // Background එක CSS එකෙන් පාලනය කරන්න ඉඩ දීම
+      renderer = new THREE.WebGLRenderer({ antialias: true });
       renderer.setSize(window.innerWidth, window.innerHeight);
       document.body.appendChild(renderer.domElement);
 
-      // --- Cloud Texture Loader with Stable URL ---
       let loader = new THREE.TextureLoader();
-      // මේ ලින්ක් එක ස්ථාවරයි. දුම (Smoke) හොඳට පේනවා.
+      // සුදු දුම් වලාකුළු (White Smoke)
       loader.load("https://raw.githubusercontent.com/marcobiedermann/playground/master/three.js/smoke-particles/images/smoke.png", function(texture){
-        
-        let cloudGeo = new THREE.PlaneGeometry(500,500); // Geometry එක Loop එකෙන් එළියට ගත්තා (Performance Fix)
-        let cloudMaterial = new THREE.MeshLambertMaterial({
-          map: texture,
-          transparent: true,
-          opacity: 0.6, // දුම හොඳට පේන්න Opacity වැඩි කළා
-          depthWrite: false,
-        });
-
-        for(let p=0; p<30; p++) {
+        let cloudGeo = new THREE.PlaneGeometry(500,500);
+        let cloudMaterial = new THREE.MeshLambertMaterial({ map: texture, transparent: true, opacity: 0.3, color: 0xffffff });
+        for(let p=0; p<25; p++) {
           let cloud = new THREE.Mesh(cloudGeo, cloudMaterial);
-          cloud.position.set(
-            Math.random()*800 - 400,
-            500,
-            Math.random()*500 - 450
-          );
-          cloud.rotation.x = 1.16;
-          cloud.rotation.y = -0.12;
+          cloud.position.set(Math.random()*800-400, 500, Math.random()*500-450);
           cloud.rotation.z = Math.random()*360;
           cloudParticles.push(cloud);
           scene.add(cloud);
         }
       });
 
-      // --- Rain Geometry ---
       rainGeo = new THREE.BufferGeometry();
       let positions = new Float32Array(rainCount * 3);
       for(let i=0; i<rainCount; i++) {
-        positions[i*3] = Math.random() * 400 - 200;
-        positions[i*3+1] = Math.random() * 500 - 250;
-        positions[i*3+2] = Math.random() * 400 - 200;
+        positions[i*3] = Math.random()*400-200;
+        positions[i*3+1] = Math.random()*500-250;
+        positions[i*3+2] = Math.random()*400-200;
       }
       rainGeo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-      
-      let rainMaterial = new THREE.PointsMaterial({
-        color: 0xffffff, // වැස්ස සුදු පාටයි
-        size: 0.15,      // ටිකක් ලොකුවට පේන්න
-        transparent: true
-      });
+      let rainMaterial = new THREE.PointsMaterial({ color: 0xffffff, size: 0.1, transparent: true });
       rain = new THREE.Points(rainGeo, rainMaterial);
       scene.add(rain);
 
@@ -206,33 +192,30 @@
     }
 
     function animate() {
-      // Cloud Movement
-      cloudParticles.forEach(p => {
-        p.rotation.z -= 0.001; // හෙමින් කැරකෙනවා
-      });
-      
-      // Rain Movement
+      cloudParticles.forEach(p => { p.rotation.z -=0.001; });
       let pos = rainGeo.attributes.position.array;
       for(let i=0; i<rainCount; i++) {
-        pos[i*3+1] -= 3; // වැස්සේ වේගය
-        if (pos[i*3+1] < -200) {
-          pos[i*3+1] = 200;
-        }
+        pos[i*3+1] -= 4;
+        if (pos[i*3+1] < -200) pos[i*3+1] = 200;
       }
       rainGeo.attributes.position.needsUpdate = true;
-      rain.rotation.y += 0.002;
 
-      // Lightning Logic
-      if(Math.random() > 0.96 || flash.power > 100) {
-        if(flash.power < 100) 
-          flash.position.set(Math.random()*400, 300 + Math.random()*200, 100);
-        flash.power = 50 + Math.random() * 500;
+      // අකුණු ගසන මොහොතේ Text එක Flash කිරීම
+      if(Math.random() > 0.95) {
+        flash.power = 100 + Math.random() * 400;
+        flash.position.set(Math.random()*400, 300, 100);
+        
+        // අකුණු ගසන විට අකුරු වලට flash animation එක එකතු කිරීම
+        const title = document.getElementById('wishTitle');
+        title.classList.add('flash-glow');
+        setTimeout(() => title.classList.remove('flash-glow'), 500);
+      } else {
+        flash.power *= 0.9;
       }
-      
+
       renderer.render(scene, camera);
       requestAnimationFrame(animate);
     }
-
     init();
   </script>
 </body>
